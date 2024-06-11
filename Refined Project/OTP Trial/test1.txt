@@ -1,0 +1,302 @@
+teacher_register.php
+
+<?php
+session_start();
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "jklcnew";
+
+//create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+//check connection
+if($conn -> connect_error){
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    $otp = $_POST["otp"];
+    
+    // Verify the OTP
+    if ($otp != $_SESSION['otp']) {
+        die("Invalid OTP. Please try again.");
+    }
+
+    $fullname = $_POST['fullname'];
+    $pcontact = $_POST['pcontact'];
+    $scontact = $_POST['scontact'];
+    $em_contact = $_POST['em_contact'];
+    $gender = $_POST['gender'];
+    $address = $_POST['address'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $sql = "INSERT INTO teacher_register (teacher_name, teacher_contact1, teacher_contact2, teacher_emergency_contact, teacher_gender, teacher_address, teacher_email, teacher_password) 
+            VALUES ('$fullname', '$pcontact', '$scontact', '$em_contact', '$gender', '$address', '$email', '$password')";
+
+    if ($conn->query($sql) === TRUE) {
+        echo "<h3>Data stored in the database successfully. Please browse your localhost phpMyAdmin to view the updated data.</h3>";
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+
+//close connection
+$conn->close();
+?>
+
+
+
+teacher_reg_html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JK Learning Centre</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .line {
+            width: 100px;
+            height: 8px;
+            background-color: #415f82;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-light fixed-top">
+        <div class="container-fluid">
+            <a href="#" class="navbar-brand">
+                <img src="booklogo.png" alt="Book Logo" style="width: 40px;" class="rounded-pill"> SJ Learning Centre
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse flex-row-reverse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                    <li class="nav-item"><a href="about.html" class="nav-link">About</a></li>
+                    <li class="nav-item"><a href="courses.html" class="nav-link">Courses</a></li>
+                    <li class="nav-item"><a href="contact1.html" class="nav-link">Contact</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">Register/Login</a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="teacherlogin.html">Teacher</a></li>
+                            <li><a class="dropdown-item" href="studlogin.html">Student</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br><br><br><br>
+    <center>
+        <div class="container">
+            <div class="heading">
+                <h2>Registration Form</h2>
+                <div class="line"></div>
+                <br>
+                <p style="color: red;">Kindly fill all the details mentioned below, in case of any doubt you can click on the help section</p>
+                <br>
+            </div>
+            <div>
+                <form id="registrationForm" method="post">
+                    <div class="row mb-3">
+                        <label for="FullName" class="col-sm-2 col-form-label">Full Name:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="fullname" name="fullname">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="pcontact" class="col-sm-2 col-form-label">Primary Contact</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="pcontact" name="pcontact">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="scontact" class="col-sm-2 col-form-label">Secondary Contact</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="scontact" name="scontact">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="em_contact" class="col-sm-2 col-form-label">Emergency Contact Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="emcontact" name="em_contact">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="gender" class="col-sm-2 col-form-label">Gender</label>
+                        <div class="col-sm-10">
+                            <input type="radio" class="form-check-input" name="gender" id="female" value="Female"> Female
+                            <input type="radio" class="form-check-input" name="gender" id="male" value="Male"> Male
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="address" class="col-sm-2 col-form-label">Address</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="address" rows="3" required name="address"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputEmail3" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" name="email" required="1" id="inputEmail3" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="confirmEmail3" class="col-sm-2 col-form-label">Confirm Email</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="emailConfirm" id="confirmEmail3" onblur="confirmEmail()" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="inputPassword3" name="password">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="confirmPassword3" class="col-sm-2 col-form-label">Confirm Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="confirmPassword3" name="confirmpassword" onblur="confirmpwd()">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-2 col-form-label"></div>
+                        <div class="col-sm-10">
+                            <button type="button" class="btn btn-secondary" onclick="generateOTP()">Generate OTP</button>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label for="otp" class="col-sm-2 col-form-label">Enter OTP</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="otp" name="otp">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="signInButton" disabled>Sign in</button>
+                </form>
+            </div>
+        </div>
+    </center>
+    <script>
+        function confirmEmail(){
+            var email = document.getElementById("inputEmail3").value;
+            var confemail = document.getElementById("confirmEmail3").value;
+            if(email != confemail){
+                alert('Email does not match!');
+            }
+        }
+        function confirmpwd(){
+            var pwd = document.getElementById("inputPassword3").value;
+            var confpwd = document.getElementById("confirmPassword3").value;
+            if(pwd != confpwd){
+                alert('Password does not match!');
+            }
+        }
+
+        function generateOTP() {
+            var email = document.getElementById("inputEmail3").value;
+            var phone = document.getElementById("pcontact").value;
+
+            if (email == "" || phone == "") {
+                alert("Please enter email and primary contact number");
+                return;
+            }
+
+            // Send AJAX request to generate and send OTP
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "generate_otp.php", true);
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    alert(xhr.responseText);
+                    document.getElementById("signInButton").disabled = false;
+                }
+            };
+            xhr.send("email=" + email + "&phone=" + phone);
+        }
+    </script>
+</body>
+</html>
+
+
+
+generate_otp.php<?php
+// Start session to store OTP
+session_start();
+
+// Include PHPMailer library for sending emails
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
+
+// Function to send OTP to email
+function sendOTPEmail($email, $otp) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.example.com'; // Set your SMTP server
+        $mail->SMTPAuth = true;
+        $mail->Username = 'your-email@example.com';
+        $mail->Password = 'your-email-password';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
+
+        $mail->setFrom('your-email@example.com', 'JK Learning Centre');
+        $mail->addAddress($email);
+
+        $mail->isHTML(true);
+        $mail->Subject = 'Your OTP for Registration';
+        $mail->Body = "Your OTP for registration is: $otp";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return false;
+    }
+}
+
+// Function to send OTP to phone number
+function sendOTPPhone($phone, $otp) {
+    // Implement your SMS gateway API to send OTP to phone
+    // For example, using Twilio API
+
+    // $twilio_sid = 'your_twilio_sid';
+    // $twilio_token = 'your_twilio_token';
+    // $twilio_phone = 'your_twilio_phone';
+
+    // $client = new Twilio\Rest\Client($twilio_sid, $twilio_token);
+    // $message = $client->messages->create(
+    //     $phone,
+    //     array(
+    //         'from' => $twilio_phone,
+    //         'body' => "Your OTP for registration is: $otp"
+    //     )
+    // );
+
+    // return $message->sid ? true : false;
+
+    // Dummy return true for now
+    return true;
+}
+
+// Generate a 6-digit OTP
+$otp = rand(100000, 999999);
+
+// Store the OTP in session
+$_SESSION['otp'] = $otp;
+
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+
+if (sendOTPEmail($email, $otp) && sendOTPPhone($phone, $otp)) {
+    echo "OTP has been sent to your email and phone.";
+} else {
+    echo "Failed to send OTP. Please try again.";
+}
+?>
